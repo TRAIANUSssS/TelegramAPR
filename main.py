@@ -57,7 +57,7 @@ def get_data():
         good_files = get_good_files(files_list)
 
         all_data[index] = get_pd_data(good_files, folder)
-        all_data[index] = pd.concat(all_data[index])
+        all_data[index] = pd.concat(all_data[index]) if len(all_data[index]) > 1 else all_data[index]
         all_data[index] = all_data[index].drop_duplicates()
 
         condition = ~all_data[0]['Ошибка?'].isna() if folder == "Errors" else None
