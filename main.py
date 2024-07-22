@@ -78,7 +78,7 @@ def get_good_files(files_list):
 
     for file in files_list:
         time_stamp = time.mktime(datetime.strptime(file.replace(".xlsx", ""), "%Y-%m-%d_%H-%M-%S").timetuple())
-        if time_now - time_stamp < 86400:  # Adjusted the condition to filter files within the last 24 hours
+        if time_now - time_stamp < 9 * 3600:  # Adjusted the condition to filter files within the last 9 hours
             good_files.append(file)
     return good_files
 
