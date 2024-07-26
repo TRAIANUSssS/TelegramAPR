@@ -8,8 +8,8 @@ import telebot
 
 from get_token import get_token
 
-PATH_TO_REPORT_FOLDER = "X:/Projects/City_Scrapper/Logs/Reports/"
-# PATH_TO_REPORT_FOLDER = "C:/apr/Logs/Reports/"
+# PATH_TO_REPORT_FOLDER = "X:/Projects/City_Scrapper/Logs/Reports/"
+PATH_TO_REPORT_FOLDER = "C:/apr/Logs/Reports/"
 bot = telebot.TeleBot(get_token())
 
 
