@@ -8,8 +8,8 @@ import telebot
 
 from get_token import get_token
 
-# PATH_TO_REPORT_FOLDER = "X:/Projects/City_Scrapper/Logs/Reports/"
-PATH_TO_REPORT_FOLDER = "C:/apr/Logs/Reports/"
+PATH_TO_REPORT_FOLDER = "X:/Projects/City_Scrapper/Logs/Reports/"
+# PATH_TO_REPORT_FOLDER = "C:/apr/Logs/Reports/"
 bot = telebot.TeleBot(get_token())
 
 
@@ -58,12 +58,18 @@ def get_data():
 
         all_data[index] = get_pd_data(good_files, folder)
         all_data[index] = pd.concat(all_data[index]) if len(all_data[index]) > 1 else all_data[index]
-        all_data[index] = all_data[index].drop_duplicates()
+        all_data[index] = all_data[index][0] if len(all_data[index]) == 1 else all_data[index]
+        if type(all_data[index]).__name__ != "list":
+            all_data[index] = all_data[index].drop_duplicates()
 
-        condition = ~all_data[0]['Ошибка?'].isna() if folder == "Errors" else None
-        print_line += print_unchecked_counts(all_data, index, folder, additional_condition=condition)
-        if condition is not None:
-            print_line += print_unchecked_counts(all_data, index, "Zeros", additional_condition=~condition)
+            condition = ~all_data[0]['Ошибка?'].isna() if folder == "Errors" else None
+            print_line += print_unchecked_counts(all_data, index, folder, additional_condition=condition)
+            if condition is not None:
+                print_line += print_unchecked_counts(all_data, index, "Zeros", additional_condition=~condition)
+        else:
+            all_data[index] = pd.DataFrame()
+            print_line += f"{folder}: error\n"
+            print_line += "Zeros: error\n" if folder == "Errors" else ""
 
     with pd.ExcelWriter("report.xlsx") as writer:
         for index, sheet_name in enumerate(["Errors", "Imgs", "Liters"]):
